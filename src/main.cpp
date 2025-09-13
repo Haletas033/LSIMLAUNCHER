@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <iostream>
 
 #include "../external/glad/include/glad/glad.h"
@@ -26,6 +27,14 @@ int main() {
 
     gladLoadGL();
 
+
+
+    std::string path = FileIO::LoadWorkingPath("settings.ini");
+    if (path.empty()) {
+        path = FileIO::GetWorkingPath();
+        FileIO::SaveWorkingPath("settings.ini", path.c_str());
+    }
+
     Gui::Init(window);
 
     while (!glfwWindowShouldClose(window)) {
@@ -45,11 +54,13 @@ int main() {
         ImGui::SetNextWindowPos(ImVec2(0, 0));
         ImGui::SetNextWindowSize(ImVec2(width, height));
 
-        Gui::BeginProjects();
+        Gui::BeginProjects(path);
 
-        Gui::DrawProject("Test1", "some very very long long file path to this amazing beautiful award winning game");
-        Gui::DrawProject("Test2", "some very very long long file path to this amazing beautiful award winning game");
-        Gui::DrawProject("Test3", "some very very long long file path to this amazing beautiful award winning game");
+        for (const auto& entry : std::filesystem::directory_iterator(path)) {
+            if (std::filesystem::is_directory(entry.status())) {
+                Gui::DrawProject(entry.path().filename().string(), path + entry.path().filename().string());
+            }
+        }
 
         ImGui::End();
 

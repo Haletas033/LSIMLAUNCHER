@@ -36,7 +36,7 @@ void Gui::CleanUp() {
     ImGui::DestroyContext();
 }
 
-void Gui::BeginProjects() {
+void Gui::BeginProjects(const std::string &path) {
     ImGui::Begin("Header", nullptr,
             ImGuiWindowFlags_NoTitleBar     |
             ImGuiWindowFlags_NoResize       |
@@ -53,7 +53,28 @@ void Gui::BeginProjects() {
     ImGui::Text("Projects");
     ImGui::SameLine();
     ImGui::SetCursorPosX(width - 100);
-    ImGui::Button("New Project");
+
+    static bool shouldOpenPopup = false;
+
+    if (ImGui::Button("New Project")) {
+        shouldOpenPopup = true;
+    }
+
+    if (shouldOpenPopup) {
+        ImGui::Begin("New Project", &shouldOpenPopup);
+        static char buffer[256] = "";
+        ImGui::InputText("Name", buffer, IM_ARRAYSIZE(buffer));
+
+        if (ImGui::Button("Create Project")) {
+            FileIO::MakeProject((path + buffer).c_str());
+            shouldOpenPopup = false;
+
+            //Clear the buffer
+            for (char & i : buffer)
+                i = *"";
+        }
+        ImGui::End();
+    }
 }
 
 

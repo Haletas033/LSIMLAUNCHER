@@ -14,6 +14,8 @@ set(IMGUI_SOURCES
         external/imgui/imgui_demo.cpp
         external/imgui/backends/imgui_impl_glfw.cpp
         external/imgui/backends/imgui_impl_opengl3.cpp
+        src/fileIO.cpp
+        include/fileIO.h
 )
 
 add_executable(LSIMLAUNCHER src/main.cpp ${IMGUI_SOURCES}

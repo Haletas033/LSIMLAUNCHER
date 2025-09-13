@@ -11,6 +11,8 @@
 #include "imgui_impl_opengl3.h"
 #include "GLFW/glfw3.h"
 
+#include "fileIO.h"
+
 class Gui {
 public:
     static float padding;
@@ -21,7 +23,7 @@ public:
     static void Begin();
     static void End();
     static void CleanUp();
-    static void BeginProjects();
+    static void BeginProjects(const std::string &path);
     static void DrawProject(const std::string &projectName, const std::string &projectPath);
 };
 
