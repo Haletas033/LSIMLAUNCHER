@@ -30,4 +30,6 @@ target_include_directories(LSIMLAUNCHER PRIVATE
         external/imgui/backends
 )
 
+file(COPY ${CMAKE_SOURCE_DIR}/projectFiles DESTINATION ${CMAKE_BINARY_DIR})
+
 target_link_libraries(LSIMLAUNCHER PRIVATE glfw glad)

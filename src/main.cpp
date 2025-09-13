@@ -27,8 +27,6 @@ int main() {
 
     gladLoadGL();
 
-
-
     std::string path = FileIO::LoadWorkingPath("settings.ini");
     if (path.empty()) {
         path = FileIO::GetWorkingPath();

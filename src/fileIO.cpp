@@ -54,8 +54,11 @@ std::string FileIO::LoadWorkingPath(const std::string &config) {
 void FileIO::MakeProject(const char* path) {
     std::filesystem::create_directory(path);
         std::filesystem::create_directory(path + std::string("/shaders"));
+            std::filesystem::rename("projectFiles/shaders/default.vert", path + std::string("/shaders/default.vert"));
+            std::filesystem::rename("projectFiles/shaders/default.frag", path + std::string("/shaders/default.frag"));
         std::filesystem::create_directory(path + std::string("/resources"));
         std::filesystem::create_directory(path + std::string("/config"));
+            std::filesystem::rename("projectFiles/config/config.json", path + std::string("/config/config.json"));
 }
 
 void FileIO::DeleteProject(const char* path) {
