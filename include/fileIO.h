@@ -7,6 +7,7 @@
 #include <string>
 #include <windows.h>
 #include <shlobj.h>
+#include <vector>
 
 class FileIO {
 public:
@@ -15,7 +16,7 @@ public:
     static std::string LoadWorkingPath(const std::string &config);
     static void MakeProject(const char* path);
     static void LoadProject();
-    static void DeleteProject();
+    static void DeleteProject(const char *path);
 };
 
 #endif //FILEIO_H

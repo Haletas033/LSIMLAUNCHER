@@ -4,6 +4,8 @@
 
 #include "../include/gui.h"
 
+#include <iostream>
+
 float Gui::padding = 8.f;
 int Gui::width = 800;
 int Gui::height = 600;
@@ -92,7 +94,10 @@ void Gui::DrawProject(const std::string &projectName, const std::string &project
     //Button to delete project on same line as load project
     ImGui::SameLine();
     ImGui::SetCursorPosX((width - 115));
-    ImGui::Button("Delete Project");
+
+    if (ImGui::Button(("Delete Project##" + projectPath).c_str())) {
+        FileIO::DeleteProject(projectPath.c_str());
+    }
 
     ImGui::Text(projectPath.c_str());
 

@@ -58,3 +58,24 @@ void FileIO::MakeProject(const char* path) {
         std::filesystem::create_directory(path + std::string("/config"));
 }
 
+void FileIO::DeleteProject(const char* path) {
+    //Convert the path into a wstring
+    std::string str(path);
+    const std::wstring wpath(str.begin(), str.end());
+    std::wstring message = L"Are you sure you want to delete ";
+    message += wpath;
+
+    const int result = MessageBoxW(
+    nullptr,
+    message.c_str(),
+    L"Warning",
+    MB_YESNO | MB_ICONWARNING
+    );
+
+
+    if (result == IDYES) {
+        std::filesystem::remove_all(path);
+    }
+}
+
+
