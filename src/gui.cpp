@@ -80,7 +80,7 @@ void Gui::BeginProjects(const std::string &path) {
 }
 
 
-void Gui::DrawProject(const std::string &projectName, const std::string &projectPath) {
+void Gui::DrawProject(const std::string &projectName, const std::string &projectPath, const std::string &LSIMPath) {
     //Get the top-left corner of this project's box
     ImVec2 box_start = ImGui::GetCursorScreenPos();
     box_start.x -= padding;
@@ -89,7 +89,11 @@ void Gui::DrawProject(const std::string &projectName, const std::string &project
     ImGui::BeginGroup();
 
     //Button to load project
-    ImGui::Button(projectName.c_str());
+    if (ImGui::Button(projectName.c_str())) {
+        std::filesystem::current_path(LSIMPath);
+        const std::string cmd = "LSIM.exe \"" + projectPath + "\"";
+        system(cmd.c_str());
+    }
 
     //Button to delete project on same line as load project
     ImGui::SameLine();

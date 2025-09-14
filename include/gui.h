@@ -24,7 +24,7 @@ public:
     static void End();
     static void CleanUp();
     static void BeginProjects(const std::string &path);
-    static void DrawProject(const std::string &projectName, const std::string &projectPath);
+    static void DrawProject(const std::string &projectName, const std::string &projectPath, const std::string &LSIMPath);
 };
 
 #endif //GUI_H

@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <iostream>
+#include <cstdlib>
 
 #include "../external/glad/include/glad/glad.h"
 #include "../external/glfw/include/GLFW/glfw3.h"
@@ -27,10 +28,18 @@ int main() {
 
     gladLoadGL();
 
-    std::string path = FileIO::LoadWorkingPath("settings.ini");
-    if (path.empty()) {
-        path = FileIO::GetWorkingPath();
-        FileIO::SaveWorkingPath("settings.ini", path.c_str());
+    //Get the LSIM directory
+    std::string LSIMPath = FileIO::LoadFromini("settings.ini", "LSIM-path");
+    if (LSIMPath.empty()) {
+        LSIMPath = FileIO::GetDirectory("Select the directory the contains LSIM.exe");
+        FileIO::SaveToini("settings.ini", LSIMPath.c_str(), "LSIM-path");
+    }
+
+    //Get the working directory
+    std::string workingPath = FileIO::LoadFromini("settings.ini", "working-path");
+    if (workingPath.empty()) {
+        workingPath = FileIO::GetDirectory("Select the directory where you want to store your projects");
+        FileIO::SaveToini("settings.ini", workingPath.c_str(), "working-path");
     }
 
     Gui::Init(window);
@@ -52,11 +61,11 @@ int main() {
         ImGui::SetNextWindowPos(ImVec2(0, 0));
         ImGui::SetNextWindowSize(ImVec2(width, height));
 
-        Gui::BeginProjects(path);
+        Gui::BeginProjects(workingPath);
 
-        for (const auto& entry : std::filesystem::directory_iterator(path)) {
+        for (const auto& entry : std::filesystem::directory_iterator(workingPath)) {
             if (std::filesystem::is_directory(entry.status())) {
-                Gui::DrawProject(entry.path().filename().string(), path + entry.path().filename().string());
+                Gui::DrawProject(entry.path().filename().string(), workingPath + entry.path().filename().string(), LSIMPath);
             }
         }
 

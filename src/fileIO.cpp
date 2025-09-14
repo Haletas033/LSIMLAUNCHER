@@ -4,15 +4,16 @@
 
 #include "../include/fileIO.h"
 
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 
-std::string FileIO::GetWorkingPath() {
+std::string FileIO::GetDirectory(const char* prompt) {
     HWND hwnd = nullptr;
 
     BROWSEINFO bi = {nullptr};
-    bi.lpszTitle = "Select the working directory";
+    bi.lpszTitle = prompt;
     bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
     bi.hwndOwner = hwnd;
 
@@ -26,14 +27,41 @@ std::string FileIO::GetWorkingPath() {
     return {};
 }
 
+void FileIO::SaveToini(const std::string& config, const char* path, const char* item) {
+    std::ifstream in(config);
+    std::vector<std::string> lines;
+    std::string line;
+    bool foundSection = false;
+    bool replaced = false;
 
-void FileIO::SaveWorkingPath(const std::string &config, const char *path) {
+    while (std::getline(in, line)) {
+        if (line == "[file-settings]") {
+            foundSection = true;
+            lines.push_back(line);
+            continue;
+        }
+        if (foundSection && line.rfind(item, 0) == 0) {
+            line = std::string(item) + "=" + path;
+            replaced = true;
+        }
+        lines.push_back(line);
+    }
+    in.close();
+
+    if (!replaced) {
+        if (!foundSection) {
+            lines.emplace_back("[file-settings]");
+        }
+        lines.push_back(std::string(item) + "=" + path);
+    }
+
     std::ofstream out(config);
-    out << "[file-settings]\n";
-    out << "path=" << path << "\n";
+    for (auto& l : lines) {
+        out << l << "\n";
+    }
 }
 
-std::string FileIO::LoadWorkingPath(const std::string &config) {
+std::string FileIO::LoadFromini(const std::string &config, const char* item) {
     std::ifstream in(config);
     std::string line, path;
 
@@ -43,8 +71,8 @@ std::string FileIO::LoadWorkingPath(const std::string &config) {
     }
 
     while (std::getline(in, line)) {
-        if (line.rfind("path=", 0) == 0) {
-            path = line.substr(5);
+        if (line.rfind(item + std::string("="), 0) == 0) {
+            path = line.substr(std::strlen(item) + 1);
             break;
         }
     }
@@ -54,11 +82,11 @@ std::string FileIO::LoadWorkingPath(const std::string &config) {
 void FileIO::MakeProject(const char* path) {
     std::filesystem::create_directory(path);
         std::filesystem::create_directory(path + std::string("/shaders"));
-            std::filesystem::rename("projectFiles/shaders/default.vert", path + std::string("/shaders/default.vert"));
-            std::filesystem::rename("projectFiles/shaders/default.frag", path + std::string("/shaders/default.frag"));
+            std::filesystem::copy_file("projectFiles/shaders/default.vert", path + std::string("/shaders/default.vert"));
+            std::filesystem::copy_file("projectFiles/shaders/default.frag", path + std::string("/shaders/default.frag"));
         std::filesystem::create_directory(path + std::string("/resources"));
         std::filesystem::create_directory(path + std::string("/config"));
-            std::filesystem::rename("projectFiles/config/config.json", path + std::string("/config/config.json"));
+            std::filesystem::copy_file("projectFiles/config/config.json", path + std::string("/config/config.json"));
 }
 
 void FileIO::DeleteProject(const char* path) {

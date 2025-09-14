@@ -8,12 +8,13 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <vector>
+#include <filesystem>
 
 class FileIO {
 public:
-    static std::string GetWorkingPath();
-    static void SaveWorkingPath(const std::string &config, const char *path);
-    static std::string LoadWorkingPath(const std::string &config);
+    static std::string GetDirectory(const char* prompt);
+    static void SaveToini(const std::string &config, const char *path, const char* item);
+    static std::string LoadFromini(const std::string &config, const char* item);
     static void MakeProject(const char* path);
     static void LoadProject();
     static void DeleteProject(const char *path);
