@@ -120,5 +120,5 @@ void Gui::DrawProject(const std::string &projectName, const std::string &project
     );
 
     //Move cursor down for next box
-    ImGui::SetCursorPosY(box_end.y + padding);
+    ImGui::Dummy(ImVec2(0, padding + 2));
 }
