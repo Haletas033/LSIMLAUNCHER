@@ -84,6 +84,7 @@ void FileIO::MakeProject(const char* path) {
         std::filesystem::create_directory(path + std::string("/shaders"));
             std::filesystem::copy_file("projectFiles/shaders/default.vert", path + std::string("/shaders/default.vert"));
             std::filesystem::copy_file("projectFiles/shaders/default.frag", path + std::string("/shaders/default.frag"));
+            std::filesystem::copy_file("projectFiles/shaders/default.geom", path + std::string("/shaders/default.geom"));
         std::filesystem::create_directory(path + std::string("/resources"));
         std::filesystem::create_directory(path + std::string("/config"));
             std::filesystem::copy_file("projectFiles/config/config.json", path + std::string("/config/config.json"));

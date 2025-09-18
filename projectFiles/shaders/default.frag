@@ -3,6 +3,7 @@ out vec4 FragColor;
 in vec3 Normal;
 in vec3 crntPos;
 in vec2 texCoord;
+in mat3 TBN_out;
 
 struct Light{
     vec4 lightColor;
@@ -15,11 +16,13 @@ uniform Light lights[MAX_LIGHTS];
 uniform vec4 meshColor;
 uniform sampler2D tex0; // diffuse map
 uniform sampler2D tex1; // specular map
+uniform sampler2D normal0; // normal map
 uniform bool useTexture;
+uniform bool useNormalMap;
 uniform vec3 viewPos; // camera position
 
 void main() {
-    vec3 normal = normalize(Normal);
+    vec3 normal = useNormalMap ? normalize(TBN_out * (texture(normal0, texCoord).rgb * 2.0 - 1.0)) : Normal;
     vec4 result = vec4(0.0);
 
     for (int i = 0; i < MAX_LIGHTS; ++i) {
@@ -34,10 +37,9 @@ void main() {
 
         // Specular
         vec3 viewDir = normalize(viewPos - crntPos);
-        vec3 reflectDir = reflect(-lightDir, normal);
+        vec3 halfwayDir = normalize(lightDir + viewDir);
         float shininess = 16.0;
-        float specAmount = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-        specAmount *= max(dot(normal, lightDir), 0.0);
+        float specAmount = pow(max(dot(normal, halfwayDir), 0.0), shininess);
         float specMap = texture(tex1, texCoord).r;
         vec3 specularColor = lights[i].lightColor.rgb * specAmount * specMap;
 
