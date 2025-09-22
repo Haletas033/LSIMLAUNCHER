@@ -3,6 +3,7 @@
     "MAX_LIGHTS": 8
   },
   "defaults": {
+    "version": "v1.0",
     "defaultWindowWidth": 1920,
     "defaultWindowHeight": 1080,
 
@@ -24,8 +25,9 @@
 
     "FOVdeg": 45.0,
     "nearPlane": 0.1,
-    "farPlane": 1000,
+    "farPlane": 10000.0,
     "sensitivity": 100.0,
+    "speed": 1.0,
     "speedMultiplier": 50.0,
 
     "transformSpeed": 0.1
