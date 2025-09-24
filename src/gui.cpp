@@ -95,8 +95,28 @@ void Gui::DrawProject(const std::string &projectName, const std::string &project
         system(cmd.c_str());
     }
 
-    //Button to delete project on same line as load project
+    //Button for run project on same line as load project
     ImGui::SameLine();
+
+    if (ImGui::Button(("Run##" + projectPath).c_str())) {
+        std::filesystem::current_path(LSIMPath);
+        std::filesystem::current_path(std::filesystem::current_path() / "..");
+
+        std::filesystem::create_directory(projectName);
+
+        system(("cmake -S . -B " + projectName + " -G Ninja -DGAME=ON").c_str());
+
+        std::filesystem::current_path(std::filesystem::current_path() / projectName);
+
+        system("ninja");
+
+        const std::string cmd = "LSIM.exe \"" + projectPath + "\"";
+        system(cmd.c_str());
+    }
+
+    //Button for delete project on same line as load project
+    ImGui::SameLine();
+
     ImGui::SetCursorPosX((width - 115));
 
     if (ImGui::Button(("Delete Project##" + projectPath).c_str())) {
