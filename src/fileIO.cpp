@@ -88,6 +88,7 @@ void FileIO::MakeProject(const char* path) {
         std::filesystem::create_directory(path + std::string("/resources"));
         std::filesystem::create_directory(path + std::string("/config"));
             std::filesystem::copy_file("projectFiles/config/config.json", path + std::string("/config/config.json"));
+        std::filesystem::create_directory(path + std::string("/scripts"));
 }
 
 void FileIO::DeleteProject(const char* path) {

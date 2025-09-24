@@ -104,7 +104,7 @@ void Gui::DrawProject(const std::string &projectName, const std::string &project
 
         std::filesystem::create_directory(projectName);
 
-        system(("cmake -S . -B " + projectName + " -G Ninja -DGAME=ON").c_str());
+        system(("cmake -S . -B " + projectName + " -G Ninja -DGAME=ON -DSCRIPTS=" + projectPath + "/scripts").c_str());
 
         std::filesystem::current_path(std::filesystem::current_path() / projectName);
 
