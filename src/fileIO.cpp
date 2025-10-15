@@ -85,10 +85,17 @@ void FileIO::MakeProject(const char* path) {
             std::filesystem::copy_file("projectFiles/shaders/default.vert", path + std::string("/shaders/default.vert"));
             std::filesystem::copy_file("projectFiles/shaders/default.frag", path + std::string("/shaders/default.frag"));
             std::filesystem::copy_file("projectFiles/shaders/default.geom", path + std::string("/shaders/default.geom"));
+            //Instance
             std::filesystem::copy_file(("projectFiles/shaders/instance.vert"), path + std::string("/shaders/instance.vert"));
+            //Skybox
+            std::filesystem::copy_file("projectFiles/shaders/skybox.vert", path + std::string("/shaders/skybox.vert"));
+            std::filesystem::copy_file("projectFiles/shaders/skybox.frag", path + std::string("/shaders/skybox.frag"));
+        //Resources dir
         std::filesystem::create_directory(path + std::string("/resources"));
+        //Config
         std::filesystem::create_directory(path + std::string("/config"));
             std::filesystem::copy_file("projectFiles/config/config.json", path + std::string("/config/config.json"));
+        //Scripts dir
         std::filesystem::create_directory(path + std::string("/scripts"));
 }
 
