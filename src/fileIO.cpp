@@ -82,13 +82,11 @@ std::string FileIO::LoadFromini(const std::string &config, const char* item) {
 void FileIO::MakeProject(const char* path) {
     std::filesystem::create_directory(path);
         std::filesystem::create_directory(path + std::string("/shaders"));
+            //Default
             std::filesystem::copy_file("projectFiles/shaders/default.vert", path + std::string("/shaders/default.vert"));
             std::filesystem::copy_file("projectFiles/shaders/default.frag", path + std::string("/shaders/default.frag"));
-            std::filesystem::copy_file("projectFiles/shaders/default.geom", path + std::string("/shaders/default.geom"));
             //Instance
             std::filesystem::copy_file(("projectFiles/shaders/instance.vert"), path + std::string("/shaders/instance.vert"));
-            std::filesystem::copy_file(("projectFiles/shaders/instance.frag"), path + std::string("/shaders/instance.frag"));
-            std::filesystem::copy_file(("projectFiles/shaders/instance.geom"), path + std::string("/shaders/instance.geom"));
             //Skybox
             std::filesystem::copy_file("projectFiles/shaders/skybox.vert", path + std::string("/shaders/skybox.vert"));
             std::filesystem::copy_file("projectFiles/shaders/skybox.frag", path + std::string("/shaders/skybox.frag"));
