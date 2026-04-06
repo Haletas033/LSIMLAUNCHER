@@ -5,8 +5,12 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 #include <string>
+
+#ifdef _WIN32
 #include <windows.h>
 #include <shlobj.h>
+#endif
+
 #include <vector>
 #include <filesystem>
 

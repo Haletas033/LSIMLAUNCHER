@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 
+#ifdef _WIN32
 std::string FileIO::GetDirectory(const char* prompt) {
     HWND hwnd = nullptr;
 
@@ -26,6 +27,20 @@ std::string FileIO::GetDirectory(const char* prompt) {
     }
     return {};
 }
+#else
+std::string FileIO::GetDirectory(const char* prompt) {
+    FILE* file = popen("zenity --file-selection --directory", "r");
+    if (file == nullptr) return {};
+    char filePath[512];
+    if (fgets(filePath, 512, file) == nullptr) {
+        pclose(file);
+        return {};
+    }
+    pclose(file);
+    *strchr(filePath, '\n') = '\0';
+    return filePath;
+}
+#endif
 
 void FileIO::SaveToini(const std::string& config, const char* path, const char* item) {
     std::ifstream in(config);
@@ -99,6 +114,7 @@ void FileIO::MakeProject(const char* path) {
         std::filesystem::create_directory(path + std::string("/scripts"));
 }
 
+#ifdef _WIN32
 void FileIO::DeleteProject(const char* path) {
     //Convert the path into a wstring
     std::string str(path);
@@ -118,5 +134,17 @@ void FileIO::DeleteProject(const char* path) {
         std::filesystem::remove_all(path);
     }
 }
+#else
+void FileIO::DeleteProject(const char* path) {
+    const std::string strPath(path);
+    std::string message = "Are you sure you want to delete ";
+    message += strPath;
+
+    if (!std::system((R"(zenity --question --text=")" + message + R"(" --title="Warning")").c_str())) {
+        std::filesystem::remove_all(path);
+    }
+}
+#endif
+
 
 

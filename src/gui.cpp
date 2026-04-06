@@ -91,7 +91,7 @@ void Gui::DrawProject(const std::string &projectName, const std::string &project
     //Button to load project
     if (ImGui::Button(projectName.c_str())) {
         std::filesystem::current_path(LSIMPath);
-        const std::string cmd = "LSIM.exe \"" + projectPath + "\"";
+        const std::string cmd = "./LSIM \"" + projectPath + "\"";
         system(cmd.c_str());
     }
 
@@ -110,7 +110,7 @@ void Gui::DrawProject(const std::string &projectName, const std::string &project
 
         system("ninja");
 
-        const std::string cmd = "LSIM.exe \"" + projectPath + "\"";
+        const std::string cmd = "./LSIM \"" + projectPath + "\"";
         system(cmd.c_str());
     }
 
